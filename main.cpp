@@ -17,5 +17,6 @@ void try_to_match(string query,string expression)
 
 int main()
 {
-    string query_string= "class A  :: B,C,D";
+    string query_string= "class A :: public B   ,private C   ,      protected  D";
+    try_to_match(query_string , CLASS_DEF);
 }
