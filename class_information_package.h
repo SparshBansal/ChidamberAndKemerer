@@ -24,6 +24,6 @@ class Class_Information_Package
     vector<int> get_parents();
     vector<int> get_method_calls();
     vector<int> get_data_accesses();
-}
+};
 
 #endif
