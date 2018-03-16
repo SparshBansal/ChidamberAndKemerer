@@ -1,0 +1,9 @@
+class someclass {
+    int x;
+	int y;
+
+	void function()
+	{
+		int z= x+y;
+	}
+};
