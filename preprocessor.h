@@ -2,8 +2,12 @@
 #define __PREPROCESSOR_H_INCLUDED__
 
 #include <fstream>
+#include <iostream>
+
 #include <string>
 #include <vector>
+
+#include <boost/algorithm/string.hpp>
 
 class preprocessor
 {

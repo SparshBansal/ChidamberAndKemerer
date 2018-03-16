@@ -1,4 +1,5 @@
 #include "reg_expressions.h"
+#include "preprocessor.h"
 
 #include <iostream>
 #include <regex>
@@ -17,6 +18,11 @@ void try_to_match(string query,string expression)
 
 int main()
 {
-    string query_string= "void func (int a , int b)";
-    try_to_match(query_string , FUNCTION_DEF);
+    string file_handle = "code.txt";
+    preprocessor processor(file_handle);
+
+    vector<string> processed_file = processor.process_file();
+	cout<<processed_file.size()<<endl;
+	for (string line : processed_file)
+		cout<<"length : " << line.size()<<" "<<line<<endl;
 }
