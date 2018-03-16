@@ -8,22 +8,22 @@ class Class_Information_Package
 {
   private:
     int _id;
-    string name;
+	std::string name;
 
-    vector<int> parents;
-    vector<int> method_calls;
-    vector<int> data_accessess;
+	std::vector<int> parents;
+	std::vector<int> method_calls;
+	std::vector<int> data_accessess;
 
   public:
     
     Class_Information_Package();
 
     // getter methods
-    string get_name();
+	std::string get_name();
     int get_id();
-    vector<int> get_parents();
-    vector<int> get_method_calls();
-    vector<int> get_data_accesses();
+	std::vector<int> get_parents();
+	std::vector<int> get_method_calls();
+	std::vector<int> get_data_accesses();
 };
 
 #endif
