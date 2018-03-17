@@ -2,8 +2,14 @@
 #define __ANALYSER_H_INCLUDED__
 
 #include "class_information_package.h"
+#include "reg_expressions.h"
+#include "types.h"
+
 #include <string>
+#include <regex>
 #include <vector>
+#include <stack>
+#include <map>
 
 class analyser
 {
