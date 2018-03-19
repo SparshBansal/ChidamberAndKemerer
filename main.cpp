@@ -1,5 +1,6 @@
 #include "reg_expressions.h"
 #include "preprocessor.h"
+#include "analyser.h"
 
 #include <iostream>
 #include <boost/regex.hpp>
@@ -37,4 +38,7 @@ int main()
 	cout<<processed_file.size()<<endl;
 	for (string line : processed_file)
 		cout<<"length : " << line.size()<<" "<<line<<endl;
+
+	analyser code_analyser(processed_file);
+	code_analyser.analyse();
 }

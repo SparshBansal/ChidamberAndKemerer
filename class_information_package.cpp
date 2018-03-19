@@ -58,7 +58,29 @@ std::vector<int>& Class_Information_Package::get_data_accesses()
 	return this->data_accessess;
 }
 
+std::unordered_set<std::string>& Class_Information_Package::get_methods_set()
+{
+	return this->methods;
+}
+
+int Class_Information_Package::get_scope_id()
+{
+	return this->scope_id;
+}
+
 //
 // Setter methods
+void Class_Information_Package::set_name(std::string name)
+{
+	this->name = name;
+}
 
+void Class_Information_Package::set_id(int _id)
+{
+	this->_id = _id;
+}
 
+void Class_Information_Package::set_scope_id(int _id)
+{
+	this->scope_id = _id;
+}

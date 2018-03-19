@@ -1,4 +1,4 @@
-class someclass {
+class someclass:: private someotherclass, public thirdclass, protected lastclass {
     int x;
 	int y;
 
