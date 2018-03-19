@@ -17,7 +17,7 @@ std::vector<std::string> analyser::get_file()
 	return this->file;
 }
 
-std::vector<Class_Information_Package> analyser::get_package_list()
+std::vector<Class_Information_Package*> analyser::get_package_list()
 {
 	return this->package_list;
 }
@@ -154,21 +154,42 @@ std::vector<Class_Information_Package> analyser::analyse()
 			switch(last_statement_type)
 			{
 				case TYPE_CLASS:
-					block_stack.push({});
+					// push the scope of the latest class on the stack
+					block_stack.push({TYPE_CLASS, package_stack.top()->get_id()});
 					break;
 
 				case TYPE_FUNCTION:
-					block_stack.push({});
+					// push the scope of the previous element
+					block_stack.push({TYPE_FUNCTION, block_stack.top().second});
 					break;
 
 				case TYPE_CODE:
-					block_stack.push({});
+					// push the scope of the previous element
+					block_stack.push({TYPE_CODE, block_stack.top().second});
+					break;
 			}
 		}
-
+		
+		// if closing block is found 
 		else if (boost::regex_match(line, block_close_regex))
 		{
+			switch(block_stack.top().first)
+			{
+				// end of a class is found
+				case TYPE_CLASS:
+					// add the package to the list of vectors
+					package_list.push_back(package_stack.top());
 
+					package_stack.pop();
+					block_stack.pop();
+					break;
+				
+				// end of function or code block
+				case TYPE_FUNCTION:
+				case TYPE_CODE:
+					block_stack.pop();
+
+			}
 		}
 
 	}

@@ -17,7 +17,7 @@
 class analyser
 {
 	private:
-		std::vector<Class_Information_Package> package_list;
+		std::vector<Class_Information_Package*> package_list;
 		std::vector<std::string> file;
 
 	public:
@@ -25,14 +25,14 @@ class analyser
 		analyser(std::vector<std::string> file);
 		
 		// getter methods 
-		std::vector<Class_Information_Package> get_package_list();
+		std::vector<Class_Information_Package*> get_package_list();
 		std::vector<std::string> get_file();
 		
 		// setter methods
 		void set_file(std::vector<std::string> file);
 
 		// analyse
-		std::vector<Class_Information_Package> analyse();
+		std::vector<Class_Information_Package*> analyse();
 };
 
 #endif
