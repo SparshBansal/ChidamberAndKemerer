@@ -12,10 +12,19 @@ class someotherclass
 {
 	int x,y,z;
 	
+
 	int fun1(int x , int y , int z , float x )
 	{
 
 	}
+	
+	class nestedclass{
+		
+		int function4(int x, int y, int z)
+		{
+
+		}
+	};
 
 	int func2()
 	{
