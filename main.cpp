@@ -40,5 +40,19 @@ int main()
 		cout<<"length : " << line.size()<<" "<<line<<endl;
 
 	analyser code_analyser(processed_file);
-	code_analyser.analyse();
+
+	vector<Class_Information_Package*> package_list = code_analyser.analyse();
+	
+	cout<<"Package list size : "<<package_list.size()<<endl;
+	for (int i=0; i< package_list.size() -1; i++)
+	{
+		cout<<"Class Identified : " << package_list[i]->get_name()<<endl;
+		std::unordered_set<string> methods = package_list[i]->get_methods_set();
+		
+		cout<<"Following functions in the class have been identified\n";
+		for (std::unordered_set<string>::iterator it = methods.begin(); it!=methods.end(); it++)
+			cout<<(*it)<<endl;
+
+		cout<<" --------              --------------------------"<<"\n\n";
+	}
 }

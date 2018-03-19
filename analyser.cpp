@@ -22,7 +22,7 @@ std::vector<Class_Information_Package*> analyser::get_package_list()
 	return this->package_list;
 }
 
-std::vector<Class_Information_Package> analyser::analyse()
+std::vector<Class_Information_Package*> analyser::analyse()
 {
 	// analyse the preprocessed code
 	if (this->file.empty())
@@ -35,7 +35,6 @@ std::vector<Class_Information_Package> analyser::analyse()
 	// as to find the accesses 
 
 	std::map<std::string, int> class_map;
-	std::unordered_set<std::string> function_set;
 	/* 
 	 * the role of the block stack is to determine the 
 	 * scope of the current class definition as well as 
@@ -58,6 +57,12 @@ std::vector<Class_Information_Package> analyser::analyse()
 	// initialize block stack
 	block_stack.push({TYPE_CODE,-1});
 	
+	// initialize the package stack with global package
+	Class_Information_Package *global_package = new Class_Information_Package();
+	global_package->set_id(-1);
+	global_package->set_name("global");
+	package_stack.push(global_package);
+	
 	int last_statement_type = TYPE_CODE;
 
 	// Initialize regular expressions 
@@ -70,6 +75,7 @@ std::vector<Class_Information_Package> analyser::analyse()
 	// analyse code line by line
 	for (std::string line : this->file)
 	{
+		std::cout<<"Analysing line : "<<line<<std::endl;
 		boost::smatch matches;
 		// check for class definition
 		// if class definition is found
@@ -134,17 +140,9 @@ std::vector<Class_Information_Package> analyser::analyse()
 			std::string function_name = matches[3];
 
 			Class_Information_Package* cpackage = NULL;
-			if (!package_stack.empty())
-				cpackage = package_stack.top();
+			cpackage = package_stack.top();
+			cpackage->get_methods_set().insert(function_name);
 			
-			// method belongs to a class 
-			if (cpackage != NULL)
-				cpackage->get_methods_set().insert(function_name);
-			
-			// method is in global scope
-			else 
-				function_set.insert(function_name);
-
 			last_statement_type = TYPE_FUNCTION;
 		}
 		
@@ -191,8 +189,11 @@ std::vector<Class_Information_Package> analyser::analyse()
 
 			}
 		}
-
+		
 	}
+
+	// add global_package to the list
+	package_list.push_back(package_stack.top());
 
 	return this->package_list;
 }
