@@ -21,8 +21,8 @@ int main()
 {
     string file_handle = "code.txt";
 
-	string query_string = "class ABC :: public BCD , private CDE ,  protected EFG , private GHD, protected LHM";
-	boost::regex reg{CLASS_DEF};
+	string query_string = "int x, y, z;";
+	boost::regex reg{MEMBER_DEF};
 	boost::smatch matches;
 
 	if (boost::regex_match(query_string, matches, reg , boost::match_extra))
@@ -48,10 +48,18 @@ int main()
 	{
 		cout<<"Class Identified : " << package_list[i]->get_name()<<endl;
 		std::unordered_set<string> methods = package_list[i]->get_methods_set();
+		map<string,int> members = package_list[i]->get_data_members();
 		
 		cout<<"Following functions in the class have been identified\n";
 		for (std::unordered_set<string>::iterator it = methods.begin(); it!=methods.end(); it++)
 			cout<<(*it)<<endl;
+
+		
+		cout<<"Following members in the class have been identified\n";
+		for (map<string,int>::iterator it= members.begin(); it!=members.end(); it++)
+		{
+			cout<<it->first<<endl;
+		}
 
 		cout<<" --------              --------------------------"<<"\n\n";
 	}

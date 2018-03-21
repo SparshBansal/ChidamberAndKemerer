@@ -66,8 +66,10 @@ std::vector<Class_Information_Package*> analyser::analyse()
 	int last_statement_type = TYPE_CODE;
 
 	// Initialize regular expressions 
+	boost::regex identifier_def_regex(IDENTIFIER_DEF);
 	boost::regex class_def_regex(CLASS_DEF);
 	boost::regex function_def_regex(FUNCTION_DEF);
+	boost::regex member_def_regex(MEMBER_DEF);
 	boost::regex block_open_regex(BLOCK_OPEN_DEF);
 	boost::regex block_close_regex(BLOCK_CLOSE_DEF);
 
@@ -146,6 +148,41 @@ std::vector<Class_Information_Package*> analyser::analyse()
 			last_statement_type = TYPE_FUNCTION;
 		}
 		
+		// member definition found 
+		else if (boost::regex_match(line,matches , member_def_regex, boost::match_extra))
+		{
+			std::string type_string = matches[0];
+			std::vector<std::string> members;
+
+			members.push_back(matches[3]);
+			
+			// more members have been defined
+			if (matches.size()>2)
+			{
+				for (int i=0; i<matches.captures(matches.size()-1).size(); i++)
+					members.push_back(matches.captures(matches.size()-1)[i]);
+			}
+			
+			int class_type_id = -1;
+			std::map<std::string,int> data_members = package_stack.top()->get_data_members();
+
+			// 
+			// check if a class object is found
+			if (boost::regex_match(type_string , identifier_def_regex))
+				class_type_id = class_map[type_string];
+			else 
+				class_type_id = TYPE_BASIC;
+
+			
+			// add the data members
+			for (int i=0; i< members.size(); i++)
+			{
+				std::cout<<"adding data member : "<<members[i]<<std::endl;
+				package_stack.top()->add_member(members[i],class_type_id);
+			}
+		}
+				
+
 		// if opening block is found
 		else if (boost::regex_match(line, block_open_regex))
 		{
@@ -189,6 +226,9 @@ std::vector<Class_Information_Package*> analyser::analyse()
 
 			}
 		}
+
+		// else if it contains method access or data access
+		
 		
 	}
 

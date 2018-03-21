@@ -1,6 +1,8 @@
 class someclass:: private someotherclass, public thirdclass, protected lastclass {
+
     int x;
 	int y;
+	
 
 	void function()
 	{
@@ -12,7 +14,7 @@ class someotherclass
 {
 	int x,y,z;
 	
-
+	someclass object,object2;
 	int fun1(int x , int y , int z , float x )
 	{
 

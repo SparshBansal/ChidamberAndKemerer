@@ -68,6 +68,12 @@ int Class_Information_Package::get_scope_id()
 	return this->scope_id;
 }
 
+std::map<std::string, int>& Class_Information_Package::get_data_members()
+{
+	return this->data_members;
+}
+
+
 //
 // Setter methods
 void Class_Information_Package::set_name(std::string name)
@@ -83,4 +89,10 @@ void Class_Information_Package::set_id(int _id)
 void Class_Information_Package::set_scope_id(int _id)
 {
 	this->scope_id = _id;
+}
+
+// util method
+void Class_Information_Package::add_member(std::string member, int type)
+{
+	this->data_members.insert({member,type});
 }

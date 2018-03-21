@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <unordered_set>
+#include <map>
 #include <string>
 
 class Class_Information_Package
@@ -12,6 +13,8 @@ class Class_Information_Package
 	std::string name;
 
 	std::vector<int> parents;
+	
+	std::map<std::string,int> data_members;
 	std::unordered_set<std::string> methods;
 
 	// methods calls 
@@ -32,6 +35,7 @@ class Class_Information_Package
 	int get_scope_id();
 	std::vector<int>& get_parents();
 	std::unordered_set<std::string>& get_methods_set();
+	std::map<std::string,int>& get_data_members();
 
 	std::vector<int>& get_self_method_calls();
 	std::vector<int>& get_out_method_calls();
@@ -41,6 +45,9 @@ class Class_Information_Package
 	void set_name(std::string name);
 	void set_id(int _id);
 	void set_scope_id(int _id);
+
+	// util methods
+	void add_member(std::string member, int type);
 };
 
 #endif
