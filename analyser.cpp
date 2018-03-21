@@ -46,6 +46,10 @@ std::vector<Class_Information_Package*> analyser::analyse()
 	 * Global scope is defined by id = -1;
 	*/
 
+	// function parameter map is used to keep track of the function
+	// parameters
+	std::map<std::string, int> function_parameter_map;
+
 	std::stack<std::pair<int,int>> block_stack;
 	/*
 	 * The purpose of package stack is to handle nested classes , we want to push the right methods 
@@ -130,7 +134,7 @@ std::vector<Class_Information_Package*> analyser::analyse()
 					package->get_parents().push_back(parent_id);
 				}
 			}
-
+			
 			package->set_scope_id(block_stack.top().second);
 			last_statement_type = TYPE_CLASS;
 		}
@@ -140,6 +144,50 @@ std::vector<Class_Information_Package*> analyser::analyse()
 		{
 			// extract method name
 			std::string function_name = matches[3];
+			
+			
+			// extract parameter info
+			if (matches.size() > 5)
+			{
+				std::string type= matches[5];
+				std::string parameter = matches[7];
+				
+				int parameter_type_idx = -2;
+				
+				if (class_map.find(type) != class_map.end())
+					parameter_type_idx = class_map[type];
+				else
+					parameter_type_idx = -1;
+
+				function_parameter_map.insert({parameter, parameter_type_idx});
+			}
+			
+			// optional list is present
+			if (matches.size() > 8)
+			{
+				int type_capture_idx = matches.size() - 3;
+				int parameter_capture_idx = matches.size() -1;
+				
+				std::vector<int> parameter_type_vector;
+				std::vector<std::string> parameter_name_vector;
+
+				for (int i=0; i<matches.captures(type_capture_idx).size(); i++)
+				{
+					const std::string type = matches.captures(type_capture_idx)[i];
+					if (class_map.find(type) != class_map.end())
+						parameter_type_vector.push_back(class_map[type]);
+					else
+						parameter_type_vector.push_back(-1);
+				}
+
+				for (int i=0; i<matches.captures(parameter_capture_idx).size(); i++)
+					parameter_name_vector.push_back(matches.captures(parameter_capture_idx)[i]);
+				
+				// insert into map
+				for (int i=0; i<parameter_name_vector.size(); i++)
+					function_parameter_map.insert({parameter_name_vector[i],parameter_type_vector[i]});
+
+			}
 
 			Class_Information_Package* cpackage = NULL;
 			cpackage = package_stack.top();
@@ -153,7 +201,7 @@ std::vector<Class_Information_Package*> analyser::analyse()
 		{
 			std::string type_string = matches[0];
 			std::vector<std::string> members;
-
+		
 			members.push_back(matches[3]);
 			
 			// more members have been defined
@@ -221,6 +269,7 @@ std::vector<Class_Information_Package*> analyser::analyse()
 				
 				// end of function or code block
 				case TYPE_FUNCTION:
+					function_parameter_map.clear();
 				case TYPE_CODE:
 					block_stack.pop();
 

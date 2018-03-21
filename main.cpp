@@ -21,8 +21,8 @@ int main()
 {
     string file_handle = "code.txt";
 
-	string query_string = "int x, y, z;";
-	boost::regex reg{MEMBER_DEF};
+	string query_string = "void function_name(int x, someclass y, double z, double object)";
+	boost::regex reg{FUNCTION_DEF};
 	boost::smatch matches;
 
 	if (boost::regex_match(query_string, matches, reg , boost::match_extra))
