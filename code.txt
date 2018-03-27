@@ -15,7 +15,7 @@ class someotherclass
 	int x,y,z;
 	
 	someclass object,object2;
-	int fun1(int x , int y , int z , float x )
+	int fun1(int x , int y , int z , float x , someclass xa )
 	{
 
 	}
