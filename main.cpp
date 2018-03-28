@@ -21,11 +21,11 @@ int main()
 {
     string file_handle = "code.txt";
 
-	string query_string = "void function_name(int x, someclass y, double z, double object)";
-	boost::regex reg{FUNCTION_DEF};
+	string query_string = "object.x = 45";
+	boost::regex reg{MEMBER_ACCESS_DEF};
 	boost::smatch matches;
 
-	if (boost::regex_match(query_string, matches, reg , boost::match_extra))
+	if (boost::regex_search(query_string, matches, reg , boost::match_extra))
 	{	
 		for (int i=0; i < matches.size(); i++)
 			for (int j=0; j< matches.captures(i).size(); j++)
@@ -36,6 +36,7 @@ int main()
 
     vector<string> processed_file = processor.process_file();
 	cout<<processed_file.size()<<endl;
+
 	for (string line : processed_file)
 		cout<<"length : " << line.size()<<" "<<line<<endl;
 
@@ -49,7 +50,8 @@ int main()
 		cout<<"Class Identified : " << package_list[i]->get_name()<<endl;
 		std::unordered_set<string> methods = package_list[i]->get_methods_set();
 		map<string,int> members = package_list[i]->get_data_members();
-		
+		vector<int> data_accessess = package_list[i]->get_data_accesses();
+
 		cout<<"Following functions in the class have been identified\n";
 		for (std::unordered_set<string>::iterator it = methods.begin(); it!=methods.end(); it++)
 			cout<<(*it)<<endl;
@@ -60,6 +62,11 @@ int main()
 		{
 			cout<<it->first<<endl;
 		}
+
+		cout<<"Following member access have been found\n";
+		for (int class_idx : data_accessess)
+			cout<<class_idx<<" ";
+		cout<<endl;
 
 		cout<<" --------              --------------------------"<<"\n\n";
 	}

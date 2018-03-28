@@ -17,7 +17,7 @@ class someotherclass
 	someclass object,object2;
 	int fun1(int x , int y , int z , float x , someclass xa )
 	{
-
+		object.x = 45;
 	}
 	
 	class nestedclass{

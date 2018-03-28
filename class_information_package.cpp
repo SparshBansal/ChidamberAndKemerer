@@ -96,3 +96,8 @@ void Class_Information_Package::add_member(std::string member, int type)
 {
 	this->data_members.insert({member,type});
 }
+
+void Class_Information_Package::add_data_access(int class_idx)
+{
+	this->data_accessess.push_back(class_idx);
+}

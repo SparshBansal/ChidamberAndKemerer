@@ -74,6 +74,7 @@ std::vector<Class_Information_Package*> analyser::analyse()
 	boost::regex class_def_regex(CLASS_DEF);
 	boost::regex function_def_regex(FUNCTION_DEF);
 	boost::regex member_def_regex(MEMBER_DEF);
+	boost::regex member_access_regex(MEMBER_ACCESS_DEF);
 	boost::regex block_open_regex(BLOCK_OPEN_DEF);
 	boost::regex block_close_regex(BLOCK_CLOSE_DEF);
 
@@ -199,8 +200,10 @@ std::vector<Class_Information_Package*> analyser::analyse()
 		// member definition found 
 		else if (boost::regex_match(line,matches , member_def_regex, boost::match_extra))
 		{
-			std::string type_string = matches[0];
+			std::string type_string = matches[1];
 			std::vector<std::string> members;
+
+			std::cout<<"Type string : "<<type_string<<std::endl;
 		
 			members.push_back(matches[3]);
 			
@@ -225,11 +228,28 @@ std::vector<Class_Information_Package*> analyser::analyse()
 			// add the data members
 			for (int i=0; i< members.size(); i++)
 			{
-				std::cout<<"adding data member : "<<members[i]<<std::endl;
+				std::cout<<"adding data member : "<<members[i]<<" of type : " << class_type_id<<std::endl;
 				package_stack.top()->add_member(members[i],class_type_id);
 			}
 		}
-				
+			
+		// member access is found
+		else if (boost::regex_search(line,matches, member_access_regex))
+		{
+			std::cout<<"Found member access\n";
+			
+			std::string instance = matches[1];
+			std::cout<<"Member " << instance<<std::endl;
+			std::map<std::string, int> member_map = package_stack.top()->get_data_members();
+			// look for instance in class_map
+			if (member_map.find(instance)!= member_map.end())
+			{
+				package_stack.top()->add_data_access(member_map[instance]);
+				std::cout<<"Found in class";
+			}
+			else if (function_parameter_map.find(instance)!= function_parameter_map.end())
+				package_stack.top()->add_data_access(function_parameter_map[instance]);
+		}
 
 		// if opening block is found
 		else if (boost::regex_match(line, block_open_regex))
@@ -276,14 +296,10 @@ std::vector<Class_Information_Package*> analyser::analyse()
 			}
 		}
 
-		// else if it contains method access or data access
-		
-		
 	}
 
 	// add global_package to the list
 	package_list.push_back(package_stack.top());
-
 	return this->package_list;
 }
 
