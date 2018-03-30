@@ -2,9 +2,11 @@
 #define __CLASS_INFORMATION_PACKAGE_H_INCLUDED__
 
 #include <vector>
+
 #include <unordered_set>
 #include <map>
 #include <string>
+
 
 class Class_Information_Package
 {

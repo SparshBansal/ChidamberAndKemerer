@@ -63,9 +63,10 @@ std::vector<Class_Information_Package*> analyser::analyse()
 	
 	// initialize the package stack with global package
 	Class_Information_Package *global_package = new Class_Information_Package();
-	global_package->set_id(-1);
+	global_package->set_id(0);
 	global_package->set_name("global");
 	package_stack.push(global_package);
+	class_map.insert({"global",0});
 	
 	int last_statement_type = TYPE_CODE;
 

@@ -10,6 +10,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)  
 set(Boost_USE_STATIC_RUNTIME OFF) 
 find_package(Boost COMPONENTS regex) 
+find_package(Threads REQUIRED)
 
 if(Boost_FOUND)
 
@@ -19,8 +20,9 @@ if(Boost_FOUND)
 		preprocessor.cpp
 		analyser.cpp
 		class_information_package.cpp
+		c_and_k.cpp
 	)
 
-target_link_libraries(parser ${Boost_LIBRARIES})
+target_link_libraries(parser ${Boost_LIBRARIES} pthread)
 endif()
 

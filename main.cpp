@@ -1,6 +1,7 @@
 #include "reg_expressions.h"
 #include "preprocessor.h"
 #include "analyser.h"
+#include "c_and_k.h"
 
 #include <iostream>
 #include <boost/regex.hpp>
@@ -70,4 +71,10 @@ int main()
 
 		cout<<" --------              --------------------------"<<"\n\n";
 	}
+
+	for (int i=0; i< package_list.size(); i++)
+		cout<<package_list[i]->get_name()<<" "<<package_list[i]->get_id()<<endl;
+
+	c_and_k computer;
+	computer._init_();
 }
