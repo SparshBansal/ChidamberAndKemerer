@@ -22,6 +22,9 @@ int main()
 {
     string file_handle = "code.txt";
 
+    // register logger
+    auto logger = spd::stdout_color_mt("console");
+
 	string query_string = "object.x = 45";
 	boost::regex reg{MEMBER_ACCESS_DEF};
 	boost::smatch matches;
@@ -76,5 +79,6 @@ int main()
 		cout<<package_list[i]->get_name()<<" "<<package_list[i]->get_id()<<endl;
 
 	c_and_k computer;
+	computer.set_package_list(package_list);
 	computer._init_();
 }

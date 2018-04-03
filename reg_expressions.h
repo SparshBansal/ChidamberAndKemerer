@@ -10,7 +10,7 @@ const std::string BLOCK_OPEN_DEF = "^{$";
 const std::string BLOCK_CLOSE_DEF = "^};?$";
 
 const std::string MEMBER_DEF = "^" + TYPE_DEF + " +" + IDENTIFIER_DEF + "(( *, *" + IDENTIFIER_DEF + ")*)? *;$";
-const std::string CLASS_DEF = "^class +" + IDENTIFIER_DEF + "( *:: *(public|private|protected) +" + IDENTIFIER_DEF + "( *, *(private|public|protected) +" + IDENTIFIER_DEF + ")*)?$";
+const std::string CLASS_DEF = "^class +" + IDENTIFIER_DEF + "( *: *(public|private|protected) +" + IDENTIFIER_DEF + "( *, *(private|public|protected) +" + IDENTIFIER_DEF + ")*)?$";
 const std::string FUNCTION_DEF = "^" + TYPE_DEF + " +" + IDENTIFIER_DEF + " *\\(" + "( *" + TYPE_DEF + " +" + IDENTIFIER_DEF + "( *, *" + TYPE_DEF + " +" + IDENTIFIER_DEF + ")*)? *\\)$";
 const std::string MEMBER_ACCESS_DEF = (IDENTIFIER_DEF + "\\." + IDENTIFIER_DEF) + "|" + (IDENTIFIER_DEF + "\\->" + IDENTIFIER_DEF) ;
 

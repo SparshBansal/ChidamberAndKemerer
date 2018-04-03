@@ -5,6 +5,7 @@
 #include "class_information_package.h"
 #include "reg_expressions.h"
 #include "types.h"
+#include "spdlog/spdlog.h"
 
 #include <boost/regex.hpp>
 #include <iostream>
@@ -14,11 +15,14 @@
 #include <stack>
 #include <map>
 
+namespace spd=spdlog;
+
 class analyser
 {
 	private:
 		std::vector<Class_Information_Package*> package_list;
 		std::vector<std::string> file;
+		std::shared_ptr<spd::logger> console;
 
 	public:
 		analyser();

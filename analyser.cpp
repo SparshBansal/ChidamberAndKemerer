@@ -4,12 +4,12 @@ analyser::analyser()
 {
 	this->file.clear();
 	this->package_list.clear();
+	this->console = spd::get("console");
 }
 
-analyser::analyser(std::vector<std::string> file)
+analyser::analyser(std::vector<std::string> file) : analyser()
 {
 	this->file = file;
-	this->package_list.clear();
 }
 
 std::vector<std::string> analyser::get_file()
@@ -100,6 +100,9 @@ std::vector<Class_Information_Package*> analyser::analyse()
 
 			// create a new entry in the map if not there already
 			const int _id = class_map.size();
+
+			this->console->info("Class map size: {0:d}" , _id);
+
 			std::map<std::string,int>::iterator it = class_map.find(base_class);
 			if (it == class_map.end())	
 				class_map.insert({base_class,_id});
@@ -204,6 +207,8 @@ std::vector<Class_Information_Package*> analyser::analyse()
 			std::string type_string = matches[1];
 			std::vector<std::string> members;
 
+			this->console->warn("class map size : {}" , class_map.size());
+			
 			std::cout<<"Type string : "<<type_string<<std::endl;
 		
 			members.push_back(matches[3]);
@@ -220,7 +225,7 @@ std::vector<Class_Information_Package*> analyser::analyse()
 
 			// 
 			// check if a class object is found
-			if (boost::regex_match(type_string , identifier_def_regex))
+			if (class_map.find(type_string) != class_map.end())
 				class_type_id = class_map[type_string];
 			else 
 				class_type_id = TYPE_BASIC;
@@ -229,7 +234,7 @@ std::vector<Class_Information_Package*> analyser::analyse()
 			// add the data members
 			for (int i=0; i< members.size(); i++)
 			{
-				std::cout<<"adding data member : "<<members[i]<<" of type : " << class_type_id<<std::endl;
+				console->info("Adding data member : {} of type {}", members[i], class_type_id);
 				package_stack.top()->add_member(members[i],class_type_id);
 			}
 		}
@@ -237,16 +242,16 @@ std::vector<Class_Information_Package*> analyser::analyse()
 		// member access is found
 		else if (boost::regex_search(line,matches, member_access_regex))
 		{
-			std::cout<<"Found member access\n";
-			
+			console->info("Found member access");
 			std::string instance = matches[1];
-			std::cout<<"Member " << instance<<std::endl;
+			console->info("Member {}", instance);
+
 			std::map<std::string, int> member_map = package_stack.top()->get_data_members();
 			// look for instance in class_map
 			if (member_map.find(instance)!= member_map.end())
 			{
 				package_stack.top()->add_data_access(member_map[instance]);
-				std::cout<<"Found in class";
+				console->info("Found in class");
 			}
 			else if (function_parameter_map.find(instance)!= function_parameter_map.end())
 				package_stack.top()->add_data_access(function_parameter_map[instance]);

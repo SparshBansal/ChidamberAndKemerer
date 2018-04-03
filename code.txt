@@ -1,4 +1,4 @@
-class someclass:: private someotherclass, public thirdclass, protected lastclass {
+class someclass{
 
     int x;
 	int y;
@@ -10,7 +10,7 @@ class someclass:: private someotherclass, public thirdclass, protected lastclass
 	}
 };
 
-class someotherclass
+class someotherclass : private someclass
 {
 	int x,y,z;
 	
@@ -39,7 +39,7 @@ class someotherclass
 	}
 };
 
-class final_class
+class final_class : public someclass, private someotherclass
 {
 	someclass instance;
 
