@@ -81,4 +81,5 @@ int main()
 	c_and_k computer;
 	computer.set_package_list(package_list);
 	computer._init_();
+	computer.compute_metrics();
 }

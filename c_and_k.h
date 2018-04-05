@@ -14,7 +14,7 @@ class c_and_k
 {
 	private:
 		std::vector<Class_Information_Package*> package_list;
-		std::map<std::string, int> class_map;
+		std::map<int, std::string> class_map;
 		std::shared_ptr<spd::logger> console;
 
 		// graph of classes
@@ -22,6 +22,10 @@ class c_and_k
 		std::vector<int> indegree,outdegree;
 
 		double depth_of_inheritance_tree();
+		double number_of_children();
+		double weighted_method_count();
+
+		int _dfs(int root, int visited[]);
 
 	public:
 		c_and_k();

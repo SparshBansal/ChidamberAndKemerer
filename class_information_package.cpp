@@ -101,3 +101,13 @@ void Class_Information_Package::add_data_access(int class_idx)
 {
 	this->data_accessess.push_back(class_idx);
 }
+
+void Class_Information_Package::add_out_method_call(int class_idx)
+{
+	this->out_method_calls.push_back(class_idx);
+}
+
+void Class_Information_Package::add_method(std::string method)
+{
+	this->methods.insert(method);
+}

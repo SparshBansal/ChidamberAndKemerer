@@ -50,7 +50,9 @@ class Class_Information_Package
 
 	// util methods
 	void add_member(std::string member, int type);
+	void add_method(std::string method);
 	void add_data_access(int class_idx);
+	void add_out_method_call(int class_idx);
 };
 
 #endif

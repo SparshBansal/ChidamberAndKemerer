@@ -12,6 +12,9 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost COMPONENTS regex) 
 find_package(Threads REQUIRED)
 
+message("Boost_LIBRARIES : " ${Boost_LIBRARIES})
+
+
 if(Boost_FOUND)
 
 	add_executable(
@@ -25,4 +28,3 @@ if(Boost_FOUND)
 
 target_link_libraries(parser ${Boost_LIBRARIES} pthread)
 endif()
-

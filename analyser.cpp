@@ -76,6 +76,7 @@ std::vector<Class_Information_Package*> analyser::analyse()
 	boost::regex function_def_regex(FUNCTION_DEF);
 	boost::regex member_def_regex(MEMBER_DEF);
 	boost::regex member_access_regex(MEMBER_ACCESS_DEF);
+	boost::regex function_access_regex(FUNCTION_ACCESS_DEF);
 	boost::regex block_open_regex(BLOCK_OPEN_DEF);
 	boost::regex block_close_regex(BLOCK_CLOSE_DEF);
 
@@ -149,7 +150,7 @@ std::vector<Class_Information_Package*> analyser::analyse()
 		{
 			// extract method name
 			std::string function_name = matches[3];
-			
+			package_stack.top()->add_method(function_name);		
 			
 			// extract parameter info
 			if (matches.size() > 5)
@@ -229,7 +230,7 @@ std::vector<Class_Information_Package*> analyser::analyse()
 				class_type_id = class_map[type_string];
 			else 
 				class_type_id = TYPE_BASIC;
-
+			
 			
 			// add the data members
 			for (int i=0; i< members.size(); i++)
@@ -238,7 +239,20 @@ std::vector<Class_Information_Package*> analyser::analyse()
 				package_stack.top()->add_member(members[i],class_type_id);
 			}
 		}
-			
+		
+		// function call is found 
+		else if (boost::regex_search(line,matches, function_access_regex))		
+		{
+			console->info("Found function access");
+			std::string instance = matches[1];
+
+			std::map<std::string, int> member_map = package_stack.top()->get_data_members();
+			if (member_map.find(instance) != member_map.end())
+				package_stack.top()->add_out_method_call(member_map[instance]);
+			else if (function_parameter_map.find(instance) != function_parameter_map.end())
+				package_stack.top()->add_out_method_call(function_parameter_map[instance]);
+		}
+
 		// member access is found
 		else if (boost::regex_search(line,matches, member_access_regex))
 		{
@@ -253,6 +267,8 @@ std::vector<Class_Information_Package*> analyser::analyse()
 				package_stack.top()->add_data_access(member_map[instance]);
 				console->info("Found in class");
 			}
+
+			// look for the instance in the function parameter map
 			else if (function_parameter_map.find(instance)!= function_parameter_map.end())
 				package_stack.top()->add_data_access(function_parameter_map[instance]);
 		}
