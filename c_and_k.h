@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <set>
 
 namespace spd = spdlog;
 
@@ -24,6 +25,8 @@ class c_and_k
 		double depth_of_inheritance_tree();
 		double number_of_children();
 		double weighted_method_count();
+		double coupling_between_objects();
+		double response_for_class();
 
 		int _dfs(int root, int visited[]);
 
@@ -41,7 +44,7 @@ class c_and_k
 
 		// metrics computation
 		double* compute_metrics();
-
+		
 };
 
 

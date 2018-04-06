@@ -42,6 +42,7 @@ class someotherclass : private someclass
 class final_class : public someclass, private someotherclass
 {
 	someclass instance;
-
+	someotherclass instance2;
 	instance.x = 55;
+	instance2.y = 25;
 };

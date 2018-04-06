@@ -63,6 +63,8 @@ double* c_and_k::compute_metrics()
 	this->console->info("Depth of inheritance tree : {}", depth_tree);
 	this->number_of_children();
 	this->weighted_method_count();
+	this->coupling_between_objects();
+	this->response_for_class();
 	return NULL;
 }
 
@@ -77,6 +79,10 @@ int c_and_k::_dfs(int root, int visited[])
 	return height+1;
 }
 
+
+// depth of inheritance tree is the max of the depth 
+// of the inheritance tree , we can get that by running 
+// dfs on the graph
 double c_and_k::depth_of_inheritance_tree()
 {
 	// get depth of inheritance tree using dfs
@@ -91,6 +97,9 @@ double c_and_k::depth_of_inheritance_tree()
 	return height;
 }
 
+// number of children is the number of immediate subclasses
+// of a class , we can get that using the outdegree measure 
+// each node in class graph
 double c_and_k::number_of_children()
 {
 	// use graph to find number of children for each class
@@ -98,10 +107,49 @@ double c_and_k::number_of_children()
 		console->info("class {} , noc  {} " , class_map[i], outdegree[i]);
 }
 
+
+
+// weighted method count is simply the number of methods in the 
+// class , we can conviniently get this using the method set 
+// availaible in the Class_information_package
 double c_and_k::weighted_method_count()
 {
 	for (Class_Information_Package* package : package_list)
 	{
 		console->info("WMC for class {} ; {} " , class_map[package->get_id()] , package->get_methods_set().size());
+	}
+}
+
+// coupling between objects is the number of other classes a 
+// class is coupled with , this can be computed by iterating 
+// and maintaing a set of classes it interacts with using the 
+// objects in the sets maintained in Class_information_package
+double c_and_k::coupling_between_objects()
+{
+	for (Class_Information_Package* package : package_list)
+	{
+		std::unordered_set<int> class_set;
+		std::vector<int> data_accessess = package->get_data_accesses();
+		std::vector<int> out_method_calls = package->get_out_method_calls();
+
+		for (int data_access: data_accessess)
+			class_set.insert(data_access);
+		for (int method_call: out_method_calls)
+			class_set.insert(method_call);
+
+		console->info("Class {} : CBO : {}", class_map[package->get_id()], class_set.size());
+		class_set.clear();
+	}
+}
+
+
+double c_and_k::response_for_class()
+{
+	for (Class_Information_Package* package : package_list)
+	{
+		// sum of remote methods + class methods
+		int mc = package->get_methods_set().size();
+		std::set<int> rm(package->get_out_method_calls().begin(), package->get_out_method_calls().end());
+		console->info("Class : {} , RFC : {}" , class_map[package->get_id()], mc + rm.size());
 	}
 }
